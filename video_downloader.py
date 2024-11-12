@@ -5,20 +5,31 @@ import re
 import os
 import subprocess
 
-# Configuração do argparse para receber a URL
+# Configuração do argparse para receber a URL e a resolução
 parser = argparse.ArgumentParser(description="Baixar vídeo e áudio do YouTube.")
 parser.add_argument("url", help="URL do vídeo do YouTube")
+parser.add_argument("--res", default="1080p", help="Resolução do vídeo (ex: 1080p, 720p, 480p). Padrão: 1080p")
 args = parser.parse_args()
 
 url = args.url
+resolution = args.res
 path = "C:/mk-yt-video-downloader/"
 
+# Instância do YouTube
 yt = YouTube(url, on_progress_callback=on_progress)
+
+# Garante que o título do arquivo seja seguro para o sistema de arquivos
 safe_title = re.sub(r'[\\/*?:"<>|]', "", yt.title).replace(" ", "_").replace("ç", "c").replace("ã", "a")
 
-# Baixando o vídeo
-print(f"Fazendo download de: {safe_title}.mp4")
-video_stream = yt.streams.filter(res="1080p").first().download(output_path=path, filename=f"{safe_title}.mp4")
+# Baixando o vídeo com a resolução especificada
+print(f"Fazendo download de: {safe_title}.mp4 na resolução {resolution}")
+video_stream = yt.streams.filter(res=resolution, file_extension="mp4").first()
+
+if not video_stream:
+    print(f"Resolução {resolution} não disponível. Tente outra resolução.")
+    exit()
+
+video_stream.download(output_path=path, filename=f"{safe_title}.mp4")
 
 # Baixando o áudio
 print(f"Fazendo download de: {safe_title}.mp3")
