@@ -1,6 +1,6 @@
 # YouTube Video and Audio Downloader
 
-Este script Python foi desenvolvido para contornar uma limitação da biblioteca `pytubefix`, que não consegue baixar vídeos do YouTube em alta resolução com áudio de forma combinada. O script realiza o download do vídeo e do áudio separadamente — o vídeo em resolução de 1080p e o áudio no melhor formato disponível. Após o download, ele utiliza o `ffmpeg` para combinar os arquivos de vídeo e áudio em um único arquivo `.mp4`, permitindo que o usuário tenha um arquivo final com alta qualidade de vídeo e som sincronizados. Isso resolve o problema de não conseguir baixar vídeos com áudio diretamente utilizando o `pytubefix`.
+Este script Python foi desenvolvido para contornar uma limitação da biblioteca pytubefix, que não permite baixar vídeos do YouTube em alta resolução com áudio de forma combinada. O script realiza o download do vídeo e do áudio separadamente e, depois, utiliza o ffmpeg para combinar ambos em um único arquivo .mp4. Isso resolve o problema de não conseguir baixar vídeos com áudio diretamente.
 
 ## Pré-requisitos
 
@@ -25,18 +25,24 @@ Certifique-se de que o ffmpeg está instalado corretamente. Você pode baixá-lo
 3. Execute o script com o seguinte comando:
 
 ```bash
-py download_youtube_video.py <YouTube_URL>
+py download_youtube_video.py <YouTube_URL [--res <resolucao>]>
 ```
 Substitua <YouTube_URL> pela URL do vídeo do YouTube que você deseja baixar.
 
 Exemplo:
 
+Baixar um vídeo em 1080p (resolução padrão):
 ```bash
 py download_youtube_video.py https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
+Baixar um vídeo em 720p:
+```bash
+py download_youtube_video.py https://www.youtube.com/watch?v=dQw4w9WgXcQ --res 720p
 ```
 
 ## Argumentos:
 - **url**: A URL do YouTube do vídeo que você deseja baixar.
+- `--res <resolucao>` é opcional e permite escolher a resolução do vídeo (ex.: 1080p, 720p, 480p). Se não for especificado, o script usará a resolução padrão de 1080p.
 
 ## Fluxo do Script
 
@@ -51,7 +57,7 @@ py download_youtube_video.py https://www.youtube.com/watch?v=dQw4w9WgXcQ
 Após executar o script, você verá a seguinte saída no terminal:
 
 ```bash
-Fazendo download de: video_title.mp4
+Fazendo download de: video_title.mp4 na resolução 720p
 Fazendo download de: video_title.mp3
 Combinando vídeo e áudio...
 Download e processamento realizados com sucesso em C:/mk-yt-video-downloader/video_title_com_audio.mp4
