@@ -1,17 +1,20 @@
-#winget install "FFmpeg (Essentials Build)"
-#pip install pytubefix
-
+import argparse
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 import re
 import os
 import subprocess
 
-url = "url"
+# Configuração do argparse para receber a URL
+parser = argparse.ArgumentParser(description="Baixar vídeo e áudio do YouTube.")
+parser.add_argument("url", help="URL do vídeo do YouTube")
+args = parser.parse_args()
+
+url = args.url
 path = "C:/mk-yt-video-downloader/"
 
 yt = YouTube(url, on_progress_callback=on_progress)
-safe_title = re.sub(r'[\\/*?:"<>|]', "", yt.title).replace(" ", "_").replace("ç","c").replace("ã","a")
+safe_title = re.sub(r'[\\/*?:"<>|]', "", yt.title).replace(" ", "_").replace("ç", "c").replace("ã", "a")
 
 # Baixando o vídeo
 print(f"Fazendo download de: {safe_title}.mp4")
@@ -28,7 +31,6 @@ input_audio = os.path.join(path, f"{safe_title}.mp3")
 output_file = os.path.join(path, f"{safe_title}_com_audio.mp4")
 
 command = f'ffmpeg -i "{input_video}" -i "{input_audio}" -c copy "{output_file}"'
-#print(command)
 subprocess.run(command)
 
 # Remover o arquivo de áudio temporário
